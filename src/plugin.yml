@@ -1,3 +1,8 @@
 name: Lobby
 main: lobby.Lobby
 version: 0.1
+commands:
+    hub:
+        description: Tp au loby
+    pvp:
+        description: Tp au choix de classe

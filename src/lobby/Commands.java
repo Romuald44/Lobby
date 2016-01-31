@@ -13,17 +13,18 @@ import org.bukkit.plugin.Plugin;
  *
  * @author Romuald
  */
-class Commands {
+public class Commands {
     
     public void InstanceSkyWars(Player p) {
-        Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
-        test.onEnable();
+        //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
+        //test.onEnable();
         Bukkit.dispatchCommand(p, "skywars");
     }
     
     public void addSkyWars(Player p) {
-        Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
-        Bukkit.dispatchCommand(p, "skywars enter");
+        //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
+        p.sendMessage("Ok pour la commands");
+        //Bukkit.dispatchCommand(p, "skywars enter");
     }
     
 }

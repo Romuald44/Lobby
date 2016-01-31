@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -37,7 +38,7 @@ class PlayerListener implements Listener {
     private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
-    private Commands cmd;
+    Commands cmd;
     
     public PlayerListener() {
         cmd = new Commands();
@@ -222,9 +223,17 @@ class PlayerListener implements Listener {
                 && e.getClickedBlock().getY() == 103 
                 && e.getClickedBlock().getZ() == -500) {
                 
-                cmd.InstanceSkyWars(p);
+                p.sendMessage("Ok pour le click");
+                cmd.addSkyWars(p);
             }
         }
+    }
+    
+    @EventHandler
+    public void onFoodLevelChange(FoodLevelChangeEvent event)
+    {
+        event.setFoodLevel(20);
+        event.setCancelled(true);
     }
     
     public void onSignJoinable() {
