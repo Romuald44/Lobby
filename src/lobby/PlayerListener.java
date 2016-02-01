@@ -21,9 +21,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
@@ -38,15 +40,21 @@ class PlayerListener implements Listener {
     private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
-    Commands cmd;
+    CmdManager cmd;
     
     public PlayerListener() {
-        cmd = new Commands();
+        cmd = Lobby.getCmd();
     }
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+        p.getInventory().clear();
+        ItemStack door = new ItemStack(Material.IRON_DOOR);
+        ItemMeta meta = (ItemMeta) door.getItemMeta();
+        meta.setDisplayName("Return to spawn");
+        door.setItemMeta(meta);
+        p.getInventory().setItem(8, door);
         sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
     }
     
@@ -54,6 +62,12 @@ class PlayerListener implements Listener {
     public void onSpawnPlayer(PlayerSpawnLocationEvent e) {
         e.setSpawnLocation(spawn_start);
     }
+    
+    /*@EventHandler
+    public void onPlayerMove(PlayerItemHeldEvent e) {
+        Player p = e.getPlayer();
+        p.sendMessage(""+e.getNewSlot());
+    }*/
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
@@ -225,6 +239,9 @@ class PlayerListener implements Listener {
                 
                 p.sendMessage("Ok pour le click");
                 cmd.addSkyWars(p);
+            }
+            if(p.getItemInHand().equals(Material.IRON_DOOR)) {
+                p.teleport(spawn_start);
             }
         }
     }

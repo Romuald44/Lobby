@@ -7,13 +7,12 @@ package lobby;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 /**
  *
  * @author Romuald
  */
-public class Commands {
+public class CmdManager {
     
     public void InstanceSkyWars(Player p) {
         //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
@@ -24,7 +23,6 @@ public class Commands {
     public void addSkyWars(Player p) {
         //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
         p.sendMessage("Ok pour la commands");
-        //Bukkit.dispatchCommand(p, "skywars enter");
+        Bukkit.dispatchCommand(p, "skywars enter");
     }
-    
 }

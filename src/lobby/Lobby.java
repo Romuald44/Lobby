@@ -24,12 +24,16 @@ public class Lobby extends JavaPlugin {
     private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
+    private CmdManager cmd;
+    private static Lobby instance;
     
     //Méthode d'activation
     @Override
     public void onEnable() {
+        instance = this;
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
+        cmd = new CmdManager();
         
         Bukkit.getPluginManager().registerEvents((Listener)new PlayerListener(), (Plugin)this);
     }
@@ -56,4 +60,7 @@ public class Lobby extends JavaPlugin {
         return false;
     }
     
+    public static CmdManager getCmd() {
+        return instance.cmd;
+    }
 }
