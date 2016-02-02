@@ -12,20 +12,28 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
@@ -41,7 +49,7 @@ class PlayerListener implements Listener {
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     CmdManager cmd;
-    
+            
     public PlayerListener() {
         cmd = Lobby.getCmd();
     }
@@ -50,11 +58,11 @@ class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         p.getInventory().clear();
-        ItemStack door = new ItemStack(Material.IRON_DOOR);
+        /*ItemStack door = new ItemStack(Material.IRON_DOOR);
         ItemMeta meta = (ItemMeta) door.getItemMeta();
         meta.setDisplayName("Return to spawn");
         door.setItemMeta(meta);
-        p.getInventory().setItem(8, door);
+        p.getInventory().setItem(8, door);*/
         sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
     }
     
@@ -238,30 +246,128 @@ class PlayerListener implements Listener {
                 && e.getClickedBlock().getZ() == -500) {
                 
                 p.sendMessage("Ok pour le click");
+                onSignJoinable(e.getClickedBlock().getState());
                 cmd.addSkyWars(p);
             }
-            if(p.getItemInHand().equals(Material.IRON_DOOR)) {
+            /*if(p.getItemInHand().equals(Material.IRON_DOOR)) {
                 p.teleport(spawn_start);
-            }
+            }*/
+        }
+    }
+    
+    public void onSignJoinable(BlockState b) {
+        //Location skybool = new Location(Bukkit.getWorld("World"), -499, 103, -500);
+        Sign s = (Sign) b;
+        
+        if(s.getLine(1).equalsIgnoreCase(ChatColor.RED+"SkyBool")) {
+            s.setLine(0, ChatColor.BLUE+"§lSkyWars");
+            s.setLine(1, ChatColor.RED+"SkyBool");//instance_skybool.getPlayers()
+            s.setLine(2, ChatColor.RED+"Disponible");
+            s.setLine(3, ChatColor.BLUE+"§l1 / 8");
+            s.update();
         }
     }
     
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent event)
-    {
-        event.setFoodLevel(20);
-        event.setCancelled(true);
-    }
-    
-    public void onSignJoinable() {
-        Location skybool = new Location(Bukkit.getWorld("World"), -499, 103, -500);
-        Sign s = (Sign) skybool.getBlock().getState();
-        
-        if(s.getLine(0).equalsIgnoreCase(ChatColor.RED+"SkyBool")) {
-            s.setLine(0, ChatColor.RED+"SkyBool");
-            s.setLine(1, ChatColor.GREEN+"1 / 8");//instance_skybool.getPlayers()
+    public void onFoodChange(FoodLevelChangeEvent e) {
+        Entity ent = e.getEntity();
+        if(ent instanceof Player) {
+            if (inLobbyWorld((Player) ent)) {
+                e.setCancelled(true);
+            }
         }
     }
+
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent e) {
+            Location spawn = Lobby.get().getSpawn();
+            if (spawn != null) {
+                if (spawn.getWorld().equals(e.getWorld())) {
+                    e.setCancelled(true);
+                } 
+            }
+    }
+
+    @EventHandler
+    public void onEntityDamageEntity(EntityDamageByEntityEvent e) {
+        Entity ent = e.getEntity();
+        Entity damager = e.getDamager();
+        if(ent instanceof Player && damager instanceof Player) {
+            if (inLobbyWorld((Player) ent)) {
+                e.setCancelled(true); 
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent e) {
+        Entity ent = e.getEntity();
+         if(ent instanceof Player) {
+            if (inLobbyWorld((Player) ent)) {
+                if (e.getCause().equals(DamageCause.FALL)) {
+                    e.setCancelled(true);
+                }
+            }
+            if (inLobbyWorld((Player) ent)) {
+                if (!e.getCause().equals(DamageCause.VOID)) {
+                    e.setCancelled(true);
+                }
+            }
+         }
+    }
+
+    @EventHandler
+    public void onBlockBreakEvent(BlockBreakEvent e) {
+        Player player = e.getPlayer();
+        if (inLobbyWorld(player)) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlaceEvent(BlockPlaceEvent e) {
+        Player player = e.getPlayer();
+        if (inLobbyWorld(player)) {
+            e.setCancelled(true);
+        }
+    }
+	
+    @EventHandler 
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (inLobbyWorld(player)) {
+            e.setCancelled(true);
+        }
+    }
+        
+    @EventHandler
+    public void onDropItem(PlayerDropItemEvent e) {
+        Player player = e.getPlayer();
+        if (inLobbyWorld(player)) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        Player player = (Player) e.getWhoClicked();
+        if (inLobbyWorld(player)) {
+            e.setCancelled(true);
+        }
+    }
+    
+    public boolean inLobbyWorld(Player p) {
+        Location spawn = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
+        if (spawn != null) {
+            if (spawn.getWorld().equals(p.getWorld())) {
+                    return true;
+            } else {
+                    return false;
+            }
+        } else {
+                return false;
+        }
+	}
     
     public void sendTitle(Player p, String title, String subTitle, int fadeIn, int duration, int fadeOut)
     {

@@ -31,6 +31,7 @@ public class Lobby extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        Bukkit.getWorld("World").setPVP(false);
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
         cmd = new CmdManager();
@@ -62,5 +63,13 @@ public class Lobby extends JavaPlugin {
     
     public static CmdManager getCmd() {
         return instance.cmd;
+    }
+    
+    public Location getSpawn() {
+        return spawn_start;
+    }
+    
+    public static Lobby get() {
+        return instance;
     }
 }
