@@ -19,14 +19,15 @@ public class SkyWars {
     }
     
     public void InstanceSkyWars(Player p) {
-        //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
-        //test.onEnable();
         Bukkit.dispatchCommand(p, "skywars");
     }
     
     public void addSkyWars(Player p) {
-        //Plugin test = Bukkit.getPluginManager().getPlugin("SkyWars");
         p.sendMessage("Ok pour la commands");
         Bukkit.dispatchCommand(p, "skybool enter");
+    }
+    
+    public void removePlayer(Player p) {
+        Bukkit.dispatchCommand(p, "skybool rmplayer");
     }
 }

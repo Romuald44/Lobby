@@ -60,11 +60,6 @@ class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         p.getInventory().clear();
-        /*ItemStack door = new ItemStack(Material.IRON_DOOR);
-        ItemMeta meta = (ItemMeta) door.getItemMeta();
-        meta.setDisplayName("Return to spawn");
-        door.setItemMeta(meta);
-        p.getInventory().setItem(8, door);*/
         sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
     }
     
@@ -265,7 +260,7 @@ class PlayerListener implements Listener {
             s.setLine(0, ChatColor.BLUE+"§lSkyWars");
             s.setLine(1, ChatColor.RED+"SkyBool");//instance_skybool.getPlayers()
             s.setLine(2, ChatColor.RED+"Disponible");
-            s.setLine(3, ChatColor.BLUE+"§l1 / 8");
+            s.setLine(3, ChatColor.BLUE+"§l0 / 8");
             s.update();
         }
     }
