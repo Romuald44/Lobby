@@ -49,9 +49,11 @@ class PlayerListener implements Listener {
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     CmdManager cmd;
+    Game game;
             
     public PlayerListener() {
         cmd = Lobby.getCmd();
+        game = Lobby.getGame();
     }
     
     @EventHandler
@@ -247,7 +249,7 @@ class PlayerListener implements Listener {
                 
                 p.sendMessage("Ok pour le click");
                 onSignJoinable(e.getClickedBlock().getState());
-                cmd.addSkyWars(p);
+                game.addSkyWars(p);
             }
             /*if(p.getItemInHand().equals(Material.IRON_DOOR)) {
                 p.teleport(spawn_start);
@@ -259,7 +261,7 @@ class PlayerListener implements Listener {
         //Location skybool = new Location(Bukkit.getWorld("World"), -499, 103, -500);
         Sign s = (Sign) b;
         
-        if(s.getLine(1).equalsIgnoreCase(ChatColor.RED+"SkyBool")) {
+        if(s.getLine(1).equalsIgnoreCase("SkyBool")) {
             s.setLine(0, ChatColor.BLUE+"§lSkyWars");
             s.setLine(1, ChatColor.RED+"SkyBool");//instance_skybool.getPlayers()
             s.setLine(2, ChatColor.RED+"Disponible");
@@ -278,7 +280,7 @@ class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onWeatherChange(WeatherChangeEvent e) {
             Location spawn = Lobby.get().getSpawn();
             if (spawn != null) {
@@ -286,7 +288,7 @@ class PlayerListener implements Listener {
                     e.setCancelled(true);
                 } 
             }
-    }
+    }*/
 
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent e) {
@@ -316,7 +318,7 @@ class PlayerListener implements Listener {
          }
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onBlockBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
         if (inLobbyWorld(player)) {
@@ -338,7 +340,7 @@ class PlayerListener implements Listener {
         if (inLobbyWorld(player)) {
             e.setCancelled(true);
         }
-    }
+    }*/
         
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {

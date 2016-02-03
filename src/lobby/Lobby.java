@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -25,6 +26,7 @@ public class Lobby extends JavaPlugin {
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     private CmdManager cmd;
+    private Game game;
     private static Lobby instance;
     
     //Méthode d'activation
@@ -35,6 +37,10 @@ public class Lobby extends JavaPlugin {
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
         cmd = new CmdManager();
+        game = new Game();
+        
+        getCommand("hub").setExecutor(cmd);
+        getCommand("pvp").setExecutor(cmd);
         
         Bukkit.getPluginManager().registerEvents((Listener)new PlayerListener(), (Plugin)this);
     }
@@ -46,27 +52,16 @@ public class Lobby extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§aLobby desactive");
     }
     
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player p = (Player) sender;
-        
-        if(cmd.getName().equalsIgnoreCase("hub") && sender instanceof Player) {
-            p.teleport(spawn_start);
-            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au spawn");
-        }
-        else if(cmd.getName().equalsIgnoreCase("pvp") && sender instanceof Player) {
-            p.teleport(choice_class);
-            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
-        }
-        return false;
-    }
-    
     public static CmdManager getCmd() {
         return instance.cmd;
     }
     
     public Location getSpawn() {
         return spawn_start;
+    }
+    
+    public static Game getGame() {
+        return instance.game;
     }
     
     public static Lobby get() {
