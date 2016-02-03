@@ -26,7 +26,7 @@ public class Lobby extends JavaPlugin {
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     private CmdManager cmd;
-    private Game game;
+    private SkyWars game;
     private static Lobby instance;
     
     //Méthode d'activation
@@ -37,7 +37,7 @@ public class Lobby extends JavaPlugin {
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
         cmd = new CmdManager();
-        game = new Game();
+        game = new SkyWars();
         
         getCommand("hub").setExecutor(cmd);
         getCommand("pvp").setExecutor(cmd);
@@ -60,7 +60,7 @@ public class Lobby extends JavaPlugin {
         return spawn_start;
     }
     
-    public static Game getGame() {
+    public static SkyWars getSW() {
         return instance.game;
     }
     

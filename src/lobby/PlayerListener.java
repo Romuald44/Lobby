@@ -49,11 +49,11 @@ class PlayerListener implements Listener {
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     CmdManager cmd;
-    Game game;
+    SkyWars game;
             
     public PlayerListener() {
         cmd = Lobby.getCmd();
-        game = Lobby.getGame();
+        game = Lobby.getSW();
     }
     
     @EventHandler

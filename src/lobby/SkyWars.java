@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
  *
  * @author Romuald
  */
-public class Game {
+public class SkyWars {
     
-    public Game() {
+    public SkyWars() {
         
     }
     
