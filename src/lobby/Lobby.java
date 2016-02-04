@@ -8,6 +8,7 @@ package lobby;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,6 +35,8 @@ public class Lobby extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Bukkit.getWorld("World").setPVP(false);
+        World lobby = Bukkit.getWorld("World");
+        lobby.setGameRuleValue("doDaylightCycle ", "false");//Pas fonctionnel
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
         cmd = new CmdManager();
