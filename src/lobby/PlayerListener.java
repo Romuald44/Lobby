@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -23,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -47,7 +49,7 @@ class PlayerListener implements Listener {
     private Location spawn_start = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
     private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
     private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
-    private Location plateform = new Location(Bukkit.getWorld("World"), 21, 101, -55);
+    private Location plateform = new Location(Bukkit.getWorld("World"), 500, 101, -500);
     CmdManager cmd;
     SkyWars game;
             
@@ -59,8 +61,11 @@ class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        p.getInventory().clear();
-        sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+        if(p.getWorld().getName().equals("world")) {
+            p.setGameMode(GameMode.SURVIVAL);
+            p.getInventory().clear();
+            sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+        }
     }
     
     @EventHandler
@@ -275,15 +280,12 @@ class PlayerListener implements Listener {
         }
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onWeatherChange(WeatherChangeEvent e) {
-            Location spawn = Lobby.get().getSpawn();
-            if (spawn != null) {
-                if (spawn.getWorld().equals(e.getWorld())) {
-                    e.setCancelled(true);
-                } 
-            }
-    }*/
+        if (e.getWorld().getName().equals("World")) {
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent e) {
@@ -313,10 +315,10 @@ class PlayerListener implements Listener {
          }
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (inLobbyWorld(player)) {
+        if (inLobbyWorld(player) && player.getGameMode() == GameMode.SURVIVAL) {
             e.setCancelled(true);
         }
     }
@@ -324,7 +326,7 @@ class PlayerListener implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        if (inLobbyWorld(player)) {
+        if (inLobbyWorld(player) && player.getGameMode() == GameMode.SURVIVAL) {
             e.setCancelled(true);
         }
     }
@@ -332,10 +334,10 @@ class PlayerListener implements Listener {
     @EventHandler 
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (inLobbyWorld(player)) {
+        if (inLobbyWorld(player) && player.getGameMode() == GameMode.SURVIVAL) {
             e.setCancelled(true);
         }
-    }*/
+    }
         
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {
@@ -348,7 +350,7 @@ class PlayerListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (inLobbyWorld(player)) {
+        if (inLobbyWorld(player) && player.getGameMode() == GameMode.SURVIVAL) {
             e.setCancelled(true);
         }
     }
@@ -364,7 +366,7 @@ class PlayerListener implements Listener {
         } else {
                 return false;
         }
-	}
+    }
     
     public void sendTitle(Player p, String title, String subTitle, int fadeIn, int duration, int fadeOut)
     {

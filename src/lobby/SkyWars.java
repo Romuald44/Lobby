@@ -23,11 +23,11 @@ public class SkyWars {
     }
     
     public void addSkyWars(Player p) {
-        p.sendMessage("Ok pour la commands");
         Bukkit.dispatchCommand(p, "skybool enter");
     }
     
     public void removePlayer(Player p) {
+        p.sendMessage("ah que couscous");
         Bukkit.dispatchCommand(p, "skybool rmplayer");
     }
 }

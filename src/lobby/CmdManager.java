@@ -32,11 +32,11 @@ public class CmdManager implements CommandExecutor {
         Player p = (Player) sender;
         
         if(cmd.getName().equalsIgnoreCase("hub") && sender instanceof Player) {
-            if(p.getWorld().equals("SkyBool1")) {
+            if(p.getWorld().getName().equals("SkyBool1")) {
                 game.removePlayer(p);
             }
             p.teleport(spawn_start);
-            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au spawn");
+            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
         }
         else if(cmd.getName().equalsIgnoreCase("pvp") && sender instanceof Player) {
             p.teleport(choice_class);

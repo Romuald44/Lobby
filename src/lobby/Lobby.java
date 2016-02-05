@@ -8,6 +8,7 @@ package lobby;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,14 +34,19 @@ public class Lobby extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        Bukkit.getWorld("World").setPVP(false);
+        this.getServer().getWorld("World").setAutoSave(false);
+        this.getServer().getWorld("World").setPVP(false);
+        this.getServer().getWorld("World").setGameRuleValue("doDaylightCycle ", "false");
+        //Bukkit.getWorld("World").setPVP(false);
+        //World lobby = Bukkit.getWorld("World");
+        //lobby.setGameRuleValue("doDaylightCycle ", "false");//Pas fonctionnel
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
         cmd = new CmdManager();
         game = new SkyWars();
-        
-        getCommand("hub").setExecutor(cmd);
-        getCommand("pvp").setExecutor(cmd);
+        //A voir si je crée une instance au début ou a chaque appel de commande
+        this.getCommand("hub").setExecutor(new CmdManager());
+        this.getCommand("pvp").setExecutor(new CmdManager());
         
         Bukkit.getPluginManager().registerEvents((Listener)new PlayerListener(), (Plugin)this);
     }
