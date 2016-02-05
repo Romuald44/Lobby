@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -60,8 +61,11 @@ class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        p.getInventory().clear();
-        sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+        if(p.getWorld().getName().equals("world")) {
+            p.setGameMode(GameMode.SURVIVAL);
+            p.getInventory().clear();
+            sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+        }
     }
     
     @EventHandler
@@ -278,7 +282,7 @@ class PlayerListener implements Listener {
 
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent e) {
-        if (e.getWorld().equals("World")) {
+        if (e.getWorld().getName().equals("World")) {
             e.setCancelled(true);
         }
     }
