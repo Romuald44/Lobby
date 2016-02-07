@@ -3,10 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Romuald/Desktop/Minecraft/Lobby/src/lobby/Lobby.java</file>
-            <file>file:/C:/Users/Romuald/Desktop/Minecraft/Lobby/src/lobby/PlayerListener.java</file>
-            <file>file:/C:/Users/Romuald/Desktop/Minecraft/Lobby/src/lobby/SkyWars.java</file>
-            <file>file:/C:/Users/Romuald/Desktop/Minecraft/Lobby/src/lobby/CmdManager.java</file>
+            <file>file:/C:/Users/Romuald/Desktop/Lobby/src/lobby/Lobby.java</file>
+            <file>file:/C:/Users/Romuald/Desktop/Lobby/src/lobby/SkyWars.java</file>
+            <file>file:/C:/Users/Romuald/Desktop/Lobby/src/lobby/CmdManager.java</file>
+            <file>file:/C:/Users/Romuald/Desktop/Lobby/src/plugin.yml</file>
         </group>
     </open-files>
 </project-private>
