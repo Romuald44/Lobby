@@ -13,18 +13,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -46,31 +42,32 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
  */
 class PlayerListener implements Listener {
 
-    private Location spawn_start = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
-    private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
-    private Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
-    private Location plateform = new Location(Bukkit.getWorld("World"), 500, 101, -500);
-    CmdManager cmd;
-    SkyWars game;
+    private static Lobby plugin;
+    private CmdManager cmd;
+    private SkyWars game;
             
     public PlayerListener() {
-        cmd = Lobby.getCmd();
-        game = Lobby.getSW();
+        plugin = Lobby.get();
+        cmd = Lobby.get().getCmd();
+        game = Lobby.get().getSW();
     }
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if(p.getWorld().getName().equals("world")) {
+            p.setHealth(20);
+            p.setFoodLevel(20);
             p.setGameMode(GameMode.SURVIVAL);
             p.getInventory().clear();
             sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+            p.sendMessage("Développement par : "+ChatColor.GREEN+"EpicSaxGuy, MrTwixo, Guitou388");
         }
     }
     
     @EventHandler
     public void onSpawnPlayer(PlayerSpawnLocationEvent e) {
-        e.setSpawnLocation(spawn_start);
+        e.setSpawnLocation(plugin.getSpawn());
     }
     
     /*@EventHandler
@@ -96,7 +93,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 104) &&
            (p.getLocation().getBlockZ() == 12)) {
             
-            p.teleport(choice_class);
+            p.teleport(plugin.getLobbyPVP());
             sendTitle(p, ChatColor.GOLD + "Mode PVP", ChatColor.RED + "Choississez votre classe", 20, 50, 20);
         }
         else if((p.getLocation().getBlockX() == -12) &&
@@ -109,7 +106,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 104) &&
            (p.getLocation().getBlockZ() == -12)) {
             
-            p.teleport(choice_skywars);
+            p.teleport(plugin.getLobbySW());
             sendTitle(p, ChatColor.GOLD + "Mode SkyWars", "", 20, 50, 20);
         }
         else if((p.getLocation().getBlockX() == 501) &&
@@ -134,7 +131,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 489)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffArcher(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Archer", ChatColor.RED + "Ca va gicler !", 20, 50, 20);
         }
@@ -148,7 +145,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 491)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffBourrin(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Bourrin", ChatColor.RED + "Tape dans le fond chui pas ta mère !", 20, 50, 20);
         }
@@ -174,7 +171,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 501)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffAssassin(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Assassin", ChatColor.RED + "Prendre par derrière ça fait mal", 20, 50, 20);
         }
@@ -188,7 +185,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 509)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffTank(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Tank", ChatColor.RED + "Prêt à recevoir ?", 20, 50, 20);
         }
@@ -214,7 +211,7 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 501)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffNormal(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Normal", ChatColor.RED + "Pour des gens normaux... Ou presque !", 20, 50, 20);
         }
@@ -228,45 +225,9 @@ class PlayerListener implements Listener {
            (p.getLocation().getBlockY() == 101) &&
            (p.getLocation().getBlockZ() == 491)) {
             
-            p.teleport(plateform);
+            p.teleport(plugin.getMapPVP());
             stuffPopo(p);
             sendTitle(p, ChatColor.GREEN + "Classe "+ ChatColor.BLUE + "Potions", ChatColor.RED + "La drogue c mal ! mvoyez", 20, 50, 20);
-        }
-    }
-    
-    @EventHandler
-    public void onPlayerClick(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        
-        /*p.sendMessage("X : "+e.getClickedBlock().getX());
-        p.sendMessage("Y : "+e.getClickedBlock().getY());
-        p.sendMessage("Z : "+e.getClickedBlock().getZ());*/
-        
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if(e.getClickedBlock().getX() == -499 
-                && e.getClickedBlock().getY() == 103 
-                && e.getClickedBlock().getZ() == -500) {
-                
-                p.sendMessage("Ok pour le click");
-                onSignJoinable(e.getClickedBlock().getState());
-                game.addSkyWars(p);
-            }
-            /*if(p.getItemInHand().equals(Material.IRON_DOOR)) {
-                p.teleport(spawn_start);
-            }*/
-        }
-    }
-    
-    public void onSignJoinable(BlockState b) {
-        //Location skybool = new Location(Bukkit.getWorld("World"), -499, 103, -500);
-        Sign s = (Sign) b;
-        
-        if(s.getLine(1).equalsIgnoreCase("SkyBool")) {
-            s.setLine(0, ChatColor.BLUE+"§lSkyWars");
-            s.setLine(1, ChatColor.RED+"SkyBool");//instance_skybool.getPlayers()
-            s.setLine(2, ChatColor.RED+"Disponible");
-            s.setLine(3, ChatColor.BLUE+"§l0 / 8");
-            s.update();
         }
     }
     
@@ -356,7 +317,7 @@ class PlayerListener implements Listener {
     }
     
     public boolean inLobbyWorld(Player p) {
-        Location spawn = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
+        Location spawn = plugin.getSpawn();
         if (spawn != null) {
             if (spawn.getWorld().equals(p.getWorld())) {
                     return true;

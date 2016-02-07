@@ -7,6 +7,7 @@ package lobby;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,12 +20,12 @@ import org.bukkit.entity.Player;
  */
 public class CmdManager implements CommandExecutor {
     
-    private Location spawn_start = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
-    private Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
+    private static Lobby plugin;
     private SkyWars game;
     
     public CmdManager() {
-        game = Lobby.getSW();
+        plugin = Lobby.get();
+        game = Lobby.get().getSW();
     }
     
     @Override
@@ -34,12 +35,15 @@ public class CmdManager implements CommandExecutor {
         if(cmd.getName().equalsIgnoreCase("hub") && sender instanceof Player) {
             if(p.getWorld().getName().equals("SkyBool1")) {
                 game.removePlayer(p);
+                p.setGameMode(GameMode.SURVIVAL);//Mettre le joueur en survie
+                p.getInventory().clear();//Vider l'inventaire
+                p.getInventory().setArmorContents(null);//A poil !
             }
-            p.teleport(spawn_start);
+            p.teleport(plugin.getSpawn());
             p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
         }
         else if(cmd.getName().equalsIgnoreCase("pvp") && sender instanceof Player) {
-            p.teleport(choice_class);
+            p.teleport(plugin.getLobbyPVP());
             p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
         }
         return false;
