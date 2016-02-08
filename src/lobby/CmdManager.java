@@ -33,18 +33,22 @@ public class CmdManager implements CommandExecutor {
         Player p = (Player) sender;
         
         if(cmd.getName().equalsIgnoreCase("hub") && sender instanceof Player) {
-            if(p.getWorld().getName().equals("SkyBool1")) {
-                game.removePlayer(p);
+            if(p.getWorld().getName().equalsIgnoreCase("world")) {
                 p.setGameMode(GameMode.SURVIVAL);//Mettre le joueur en survie
                 p.getInventory().clear();//Vider l'inventaire
                 p.getInventory().setArmorContents(null);//A poil !
+                p.teleport(plugin.getSpawn());
+                p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au HUB");
             }
-            p.teleport(plugin.getSpawn());
-            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
         }
         else if(cmd.getName().equalsIgnoreCase("pvp") && sender instanceof Player) {
             p.teleport(plugin.getLobbyPVP());
             p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au lobby PVP");
+        }
+        else if(cmd.getName().equalsIgnoreCase("exia") && sender instanceof Player) {
+            p.teleport(new Location(Bukkit.getWorld("exia"), 0, 4, 0));
+            p.setGameMode(GameMode.CREATIVE);
+            p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter à l'exia");
         }
         return false;
     }

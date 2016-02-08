@@ -7,6 +7,8 @@ package lobby;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +23,6 @@ public class Lobby extends JavaPlugin {
     private static Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
     private static Location map_pvp = new Location(Bukkit.getWorld("World"), 21, 101, -55);
     
-    private CmdManager cmd;
     private SkyWars game;
     private static Lobby instance;
     
@@ -29,6 +30,11 @@ public class Lobby extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        
+        WorldCreator worldCreator = new WorldCreator("exia");
+        worldCreator.generateStructures(false);
+	World world = worldCreator.createWorld();
+        
         this.getServer().getWorld("World").setPVP(false);
         this.getServer().getWorld("World").setStorm(false);
         this.getServer().getWorld("World").setThundering(false);
@@ -38,11 +44,11 @@ public class Lobby extends JavaPlugin {
         
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
-        cmd = new CmdManager();
         game = new SkyWars();
-        //A voir si je crée une instance au début ou a chaque appel de commande
+        
         this.getCommand("hub").setExecutor(new CmdManager());
         this.getCommand("pvp").setExecutor(new CmdManager());
+        this.getCommand("exia").setExecutor(new CmdManager());
         
         Bukkit.getPluginManager().registerEvents((Listener)new PlayerListener(), (Plugin)this);
     }
@@ -60,10 +66,6 @@ public class Lobby extends JavaPlugin {
     
     public SkyWars getSW() {
         return game;
-    }
-    
-    public CmdManager getCmd() {
-        return cmd;
     }
     
     public Location getSpawn() {

@@ -8,7 +8,6 @@ package lobby;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -34,7 +33,6 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 /**
  *
@@ -43,19 +41,17 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 class PlayerListener implements Listener {
 
     private static Lobby plugin;
-    private CmdManager cmd;
     private SkyWars game;
             
     public PlayerListener() {
         plugin = Lobby.get();
-        cmd = Lobby.get().getCmd();
         game = Lobby.get().getSW();
     }
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if(p.getWorld().getName().equals("world")) {
+        if(p.getWorld().getName().equalsIgnoreCase("world")) {
             p.setHealth(20);
             p.setFoodLevel(20);
             p.setGameMode(GameMode.SURVIVAL);
@@ -63,22 +59,22 @@ class PlayerListener implements Listener {
             sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
             p.sendMessage("Développement par : "+ChatColor.GREEN+"EpicSaxGuy, MrTwixo, Guitou388");
         }
+        p.teleport(plugin.getSpawn());
+        /*else if(p.getWorld().getName().equalsIgnoreCase("SkyBool1")) {
+            p.teleport(plugin.getSpawn());
+            p.setHealth(20);
+            p.setFoodLevel(20);
+            p.setGameMode(GameMode.SURVIVAL);
+            p.getInventory().clear();
+            sendTitle(p, ChatColor.GREEN + "Bienvenue", ChatColor.BLUE + p.getName(), 20, 50, 20);
+            p.sendMessage("Développement par : "+ChatColor.GREEN+"EpicSaxGuy, MrTwixo, Guitou388");
+        }*/
     }
-    
-    @EventHandler
-    public void onSpawnPlayer(PlayerSpawnLocationEvent e) {
-        e.setSpawnLocation(plugin.getSpawn());
-    }
-    
-    /*@EventHandler
-    public void onPlayerMove(PlayerItemHeldEvent e) {
-        Player p = e.getPlayer();
-        p.sendMessage(""+e.getNewSlot());
-    }*/
     
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
+        
         /*p.sendMessage("X : "+p.getLocation().getBlockX());
         p.sendMessage("Y : "+p.getLocation().getBlockY());
         p.sendMessage("Z : "+p.getLocation().getBlockZ());*/

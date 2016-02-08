@@ -6,3 +6,5 @@ commands:
         description: Tp au loby
     pvp:
         description: Tp au choix de classe
+    exia:
+        description: Tp a la map exia
