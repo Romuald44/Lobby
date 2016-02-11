@@ -23,10 +23,10 @@ public class SkyWars {
     }
     
     public void addSkyWars(Player p) {
-        Bukkit.dispatchCommand(p, "skybool enter");
+        Bukkit.dispatchCommand(p, "skywars join skybool");
     }
     
     public void removePlayer(Player p) {
-        Bukkit.dispatchCommand(p, "skybool rmplayer");
+        Bukkit.dispatchCommand(p, "skywars quit skybool");
     }
 }

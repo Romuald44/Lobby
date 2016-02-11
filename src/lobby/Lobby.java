@@ -18,37 +18,32 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Lobby extends JavaPlugin {
     
-    private static Location spawn_start = new Location(Bukkit.getWorld("World"), 0.5, 101, 0.5);
-    private static Location choice_class = new Location(Bukkit.getWorld("World"), 500.5, 101, 500.5);
-    private static Location choice_skywars = new Location(Bukkit.getWorld("World"), -498.5, 103, -501.5);
-    private static Location map_pvp = new Location(Bukkit.getWorld("World"), 21, 101, -55);
-    
-    private SkyWars game;
     private static Lobby instance;
+    private SkyWars game;
     
     //Méthode d'activation
     @Override
     public void onEnable() {
         instance = this;
+        game = new SkyWars();
         
-        WorldCreator worldCreator = new WorldCreator("exia");
-        worldCreator.generateStructures(false);
-	World world = worldCreator.createWorld();
+        createExia();
         
-        this.getServer().getWorld("World").setPVP(false);
-        this.getServer().getWorld("World").setStorm(false);
-        this.getServer().getWorld("World").setThundering(false);
-        this.getServer().getWorld("World").setWeatherDuration(Integer.MAX_VALUE);
+        this.getServer().getWorld("world").setPVP(false);
+        this.getServer().getWorld("world").setStorm(false);
+        this.getServer().getWorld("world").setThundering(false);
+        this.getServer().getWorld("world").setWeatherDuration(Integer.MAX_VALUE);
         this.getServer().getWorld("World").setAutoSave(false);
-        this.getServer().getWorld("World").setGameRuleValue("doDaylightCycle ", "false");
+        this.getServer().getWorld("world").setGameRuleValue("doDaylightCycle ", "false");
         
         //Message en vert
         Bukkit.getConsoleSender().sendMessage("§aLobby actif!");
-        game = new SkyWars();
         
         this.getCommand("hub").setExecutor(new CmdManager());
-        this.getCommand("pvp").setExecutor(new CmdManager());
         this.getCommand("exia").setExecutor(new CmdManager());
+        this.getCommand("templerun").setExecutor(new CmdManager());
+        this.getCommand("prairie").setExecutor(new CmdManager());
+        this.getCommand("netherwars").setExecutor(new CmdManager());
         
         Bukkit.getPluginManager().registerEvents((Listener)new PlayerListener(), (Plugin)this);
     }
@@ -60,27 +55,17 @@ public class Lobby extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§aLobby desactive");
     }
     
+    public void createExia() {
+        WorldCreator worldCreator = new WorldCreator("exia");
+        worldCreator.generateStructures(false);
+	World world = worldCreator.createWorld();
+    }
+    
     public static Lobby get() {
         return instance;
     }
     
     public SkyWars getSW() {
         return game;
-    }
-    
-    public Location getSpawn() {
-        return spawn_start;
-    }
-    
-    public Location getLobbyPVP() {
-        return choice_class;
-    }
-    
-    public Location getLobbySW() {
-        return choice_skywars;
-    }
-    
-    public Location getMapPVP() {
-        return map_pvp;
     }
 }

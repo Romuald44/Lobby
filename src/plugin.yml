@@ -4,7 +4,11 @@ version: 0.1
 commands:
     hub:
         description: Tp au loby
-    pvp:
-        description: Tp au choix de classe
     exia:
         description: Tp a la map exia
+    templerun:
+        description: Tp a la map templerun
+    prairie:
+        description: Tp a la map prairie
+    netherwars:
+        description: Tp a la map netherwars
