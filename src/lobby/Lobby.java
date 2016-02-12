@@ -26,14 +26,14 @@ public class Lobby extends JavaPlugin {
     public void onEnable() {
         instance = this;
         game = new SkyWars();
-        
+        saveDefaultConfig();
         createExia();
         
-        this.getServer().getWorld("world").setPVP(false);
+        this.getServer().getWorld("world").setPVP(true);//false
         this.getServer().getWorld("world").setStorm(false);
         this.getServer().getWorld("world").setThundering(false);
         this.getServer().getWorld("world").setWeatherDuration(Integer.MAX_VALUE);
-        this.getServer().getWorld("World").setAutoSave(false);
+        //this.getServer().getWorld("World").setAutoSave(false);
         this.getServer().getWorld("world").setGameRuleValue("doDaylightCycle ", "false");
         
         //Message en vert

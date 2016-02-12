@@ -70,7 +70,7 @@ public class CmdManager implements CommandExecutor {
             p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter a la Prairie");
         }
         else if(cmd.getName().equalsIgnoreCase("netherwars") && sender instanceof Player) {
-            p.teleport(new Location(Bukkit.getWorld("netherwars1"), -204, 22, -624));
+            p.teleport(new Location(Bukkit.getWorld("netherwars1"), -30, 17, -1090));
             p.setGameMode(GameMode.CREATIVE);
             p.sendMessage(ChatColor.RED+p.getName()+ChatColor.RESET+" Téléporter au NetherWars");
         }
